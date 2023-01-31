@@ -1,9 +1,15 @@
-import pytest
+import allure
 from lib.base_case import BaseCase
 from lib.my_requests import MyRequests
 from lib.assertions import Assertions
 
+
+@allure.epic("Deletion cases")
+@allure.feature("Deletion")
 class TestUserDelete(BaseCase):
+    @allure.title("Test delete user with id 2 (unsuccessful)")
+    @allure.description("This test doesn't delete user with id=2")
+    @allure.severity(severity_level="CRITICAL")
     def test_delete_user_id2(self):
         # Login User id=2
         data = {
@@ -36,6 +42,9 @@ class TestUserDelete(BaseCase):
 
         Assertions.assert_code_status(response3, 200)
 
+    @allure.title("Test delete just create user successful")
+    @allure.description("This test successfully delete just create user")
+    @allure.severity(severity_level="NORMAL")
     def test_create_and_delete_user(self):
         # REGISTER
         register_data = self.prepare_registrations_data()
@@ -78,6 +87,9 @@ class TestUserDelete(BaseCase):
         Assertions.assert_code_status(response4, 404)
         assert response4.content.decode("utf-8") == "User not found"
 
+    @allure.title("Test delete user with different user authorization unsuccessful")
+    @allure.description("This test doesn't delete user with different user authorization")
+    @allure.severity(severity_level="NORMAL")
     def test_delete_user_by_other_authorization(self):
         # REGISTER USER1
         user1_register_data = self.prepare_registrations_data()

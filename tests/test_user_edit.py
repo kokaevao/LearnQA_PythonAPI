@@ -1,9 +1,14 @@
-
+import allure
 from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 
+@allure.epic("Edition cases")
+@allure.feature("Edition")
 class TestUserEdit(BaseCase):
+    @allure.title("Test edit just created user successful")
+    @allure.description("This test successfully edit user after creation")
+    @allure.severity(severity_level="CRITICAL")
     def test_edit_just_create_user(self):
         # REGISTER
         register_data = self.prepare_registrations_data()
@@ -57,7 +62,9 @@ class TestUserEdit(BaseCase):
             "Wrong name of the user after edit"
         )
 
-
+    @allure.title("Test edit user without authorization unsuccessful")
+    @allure.description("This test doesn't edit user without authorization")
+    @allure.severity(severity_level="NORMAL")
     def test_edit_created_user_without_authorization(self):
         # REGISTER
         register_data = self.prepare_registrations_data()
@@ -80,8 +87,9 @@ class TestUserEdit(BaseCase):
         Assertions.assert_code_status(response2, 400)
         assert response2.content.decode("utf-8") == "Auth token not supplied"
 
-
-
+    @allure.title("Test edit user with authorization as different user unsuccessful")
+    @allure.description("This test doesn't edit user with authorization as different user")
+    @allure.severity(severity_level="NORMAL")
     def test_edit_user_by_other_authorization(self):
         # Login User 1
         data = {
@@ -115,7 +123,9 @@ class TestUserEdit(BaseCase):
         Assertions.assert_code_status(response3, 400)
         assert response3.content.decode("utf-8") == "Please, do not edit test users with ID 1, 2, 3, 4 or 5."
 
-
+    @allure.title("Test edit user email to email without '@'unsuccessful")
+    @allure.description("This test doesn't edit user email to email without '@'")
+    @allure.severity(severity_level="NORMAL")
     def test_edit_created_user_without_symbol_mail(self):
         # REGISTER
         register_data = self.prepare_registrations_data()
@@ -154,6 +164,9 @@ class TestUserEdit(BaseCase):
         Assertions.assert_code_status(response3, 400)
         assert response3.content.decode("utf-8") == "No data to update"
 
+    @allure.title("Test edit user name to too short name unsuccessful")
+    @allure.description("This test doesn't edit user name to too short name")
+    @allure.severity(severity_level="MINOR")
     def test_edit_created_user_with_incorrect_data(self):
         # REGISTER
         register_data = self.prepare_registrations_data()

@@ -5,12 +5,14 @@ from lib.my_requests import MyRequests
 import allure
 
 @allure.epic("Authorization cases")
+@allure.feature("Authorization")
 class TestUserAuth(BaseCase):
     exclude_params = [
         ("no_cookie"),
         ("no_token")
     ]
 
+    @allure.step("Authorization with user 'vinkotov@example.com'")
     def setup(self):
         data = {
             'email': 'vinkotov@example.com',
@@ -23,10 +25,9 @@ class TestUserAuth(BaseCase):
         self.token = self.get_header(response1, "x-csrf-token")
         self.user_id_from_auth_method = self.get_json_value(response1, "user_id")
 
-
-
-
+    @allure.title("Test user authorize succesfuly)")
     @allure.description("This test successfuly authorize user by email and password")
+    @allure.severity(severity_level="BLOCKER")
     def test_auth_user(self):
 
 
@@ -43,7 +44,9 @@ class TestUserAuth(BaseCase):
             "User id from auth method is not equal to user id from check method"
         )
 
+    @allure.title("Test user authorize w/o sending auth cookie or token (unsuccessful)")
     @allure.description("This test checks authorization status w/o sending auth cookie or token")
+    @allure.severity(severity_level="CRITICAL")
     @pytest.mark.parametrize('condition', exclude_params)
     def test_negative_auth_check(self, condition):
 
